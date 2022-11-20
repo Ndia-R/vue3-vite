@@ -1,0 +1,76 @@
+@charset "utf-8";   /* 文字コード指定 */
+/**
+ * ***************************************
+ * リセットＣＳＳ
+ * ***************************************
+ */
+html, body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, address, cite, code,
+del, dfn, em, img, ins, kbd, q, samp,
+small, strong, sub, sup, var,
+b, i,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, figcaption, figure, 
+footer, header, main, menu, nav, section, summary,
+time, mark, audio, video {
+    margin: 0;                      /* 要素のmargin/paddingを0にする */
+    padding: 0;
+}
+
+article, aside, details, figcaption, figure,
+footer, header, main, menu, nav, section {
+    display: block;                 /* 旧ブラウザの表示対策 */
+}
+
+html *,
+::before,
+::after {
+    box-sizing: border-box;         /* すべての要素のボックスモデルをボーダーボックスに変更する */
+}
+
+html {
+    font-size: 14px;                /* モバイルの時の基本フォントサイズ */
+    -webkit-text-size-adjust: 100%; /* スマートフォン等の横長表示での文字サイズ拡大防止 */
+}
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;            /* デスクトップの時の基本フォントサイズ */
+    }
+}
+
+body {
+    color: #333;
+    line-height: 1.5;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+}
+
+* {
+    line-height: inherit;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+img {
+    border: 0;                      /* リンク時に画像に枠線が表示されるのを防止 */
+}
+
+ul,ol {
+    list-style-type: none;          /* リストの冒頭マーク非表示 */
+}
+
+table {
+    border-collapse: collapse;      /* 表組の罫線を重ねて表示 */
+    border-spacing: 0;
+}
+
+img, input, select, textarea { 
+    vertical-align: middle;         /* インライン中のアイテム表示位置調整 */
+}
+
+:focus {
+    outline: none;                  /* フォーカス時の枠線を消す */
+}
