@@ -15,6 +15,7 @@ const handleClickSignUp = async () => {
   };
   try {
     const res = await axios.post('/api/auth/sign-up', body);
+    localStorage.setItem('access_token', res.data.access_token);
     console.log(res.data);
     router.push('/home');
   } catch (err: any) {

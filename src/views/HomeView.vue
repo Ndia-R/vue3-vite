@@ -7,7 +7,9 @@ const users = ref();
 onMounted(async () => {
   try {
     const res = await axios.get('/api/user/users', {
-      withCredentials: true,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
     });
     users.value = res.data;
   } catch (err: any) {
