@@ -1,4 +1,3 @@
-import axios from 'axios';
 import type { AxiosRequestConfig } from 'axios';
 import { authAxios } from './axios';
 import useRefreshToken from './useRefreshToken';
