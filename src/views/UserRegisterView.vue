@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import router from '@/router';
 import axios from 'axios';
 import { ref } from 'vue';
 
@@ -8,19 +7,21 @@ const password = ref('');
 
 const errorMessage = ref('');
 
-const handleClickSignUp = async () => {
+const handleClickUserRegister = async () => {
   const body: { username: String; password: String } = {
     username: username.value,
     password: password.value,
   };
   try {
-    const res = await axios.post('/api/auth/sign-up', body);
-    localStorage.setItem('access_token', res.data.access_token);
+    const res = await axios.post('/api/auth/user-register', body);
     console.log(res.data);
-    router.push('/home');
+    errorMessage.value = '登録完了しました';
+    setTimeout(() => {
+      errorMessage.value = '';
+    }, 1000);
   } catch (err: any) {
     console.log(err.response.data);
-    errorMessage.value = err.response.data.message;
+    errorMessage.value = err.response.data.error.message;
     setTimeout(() => {
       errorMessage.value = '';
     }, 1000);
@@ -30,11 +31,11 @@ const handleClickSignUp = async () => {
 
 <template>
   <div>
-    <h1>Sign up</h1>
+    <h1>ユーザー登録</h1>
     <div class="input-form">
       <input type="text" v-model="username" placeholder="username" />
       <input type="password" v-model="password" placeholder="password" />
-      <button @click="handleClickSignUp">SIGN UP</button>
+      <button @click="handleClickUserRegister">ユーザー登録</button>
       <div>{{ errorMessage }}</div>
     </div>
   </div>

@@ -8,18 +8,19 @@ const password = ref('');
 
 const errorMessage = ref('');
 
-const handleClickSignIn = async () => {
+const handleClickLogin = async () => {
   const body: { username: String; password: String } = {
     username: username.value,
     password: password.value,
   };
   try {
-    const res = await axios.post('/api/auth/sign-in', body);
+    const res = await axios.post('/api/auth/login', body);
     console.log(res.data);
+    localStorage.setItem('access_token', res.data.access_token);
     router.push('/home');
   } catch (err: any) {
     console.log(err.response.data);
-    errorMessage.value = err.response.data.message;
+    errorMessage.value = err.response.data.error.message;
     setTimeout(() => {
       errorMessage.value = '';
     }, 1000);
@@ -29,11 +30,11 @@ const handleClickSignIn = async () => {
 
 <template>
   <div>
-    <h1>Sign in</h1>
+    <h1>ログイン</h1>
     <div class="input-form">
       <input type="text" v-model="username" placeholder="username" />
       <input type="password" v-model="password" placeholder="password" />
-      <button @click="handleClickSignIn">SIGN IN</button>
+      <button @click="handleClickLogin">ログイン</button>
       <div>{{ errorMessage }}</div>
     </div>
   </div>
