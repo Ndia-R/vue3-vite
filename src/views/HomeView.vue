@@ -1,24 +1,30 @@
 <script setup lang="ts">
-import axios from 'axios';
 import { onMounted, ref } from 'vue';
+import { useAuthAxios } from '@/composables/useAuthAxios';
 
-type UserDTO = {
+const authAxios = useAuthAxios();
+
+type User = {
   id: number;
   username: string;
   password: string;
   refresh_token: string;
-  refresh_token_iat: number;
 };
 
-type TestResultDTO = {
+type TestResult = {
   id: number;
   userId: number;
   testName: string;
   score: number;
 };
 
-const users = ref<UserDTO[]>([]);
-const testResults = ref<TestResultDTO[]>([]);
+type TestResultDTO = {
+  testName: string;
+  score: number;
+};
+
+const users = ref<User[]>([]);
+const testResults = ref<TestResult[]>([]);
 
 onMounted(async () => {
   users.value = await fetchUsers();
@@ -32,36 +38,40 @@ const handleClickTest = async () => {
   testResults.value = await fetchTestResults();
 };
 
-const fetchUsers = async (): Promise<UserDTO[]> => {
-  const url = '/api/user/users';
+const handleClickRegister = async () => {
+  await registerTestResult();
+};
+
+const fetchUsers = async (): Promise<User[]> => {
+  const url = '/user/users';
   try {
-    const res = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-      },
-    });
+    const res = await authAxios.get(url);
     return res.data;
   } catch (err: any) {
-    console.log(err);
     throw new Error(err);
   }
 };
 
-const fetchTestResults = async (): Promise<TestResultDTO[]> => {
-  const url = '/api/test-result/test-results';
+const fetchTestResults = async (): Promise<TestResult[]> => {
+  const url = '/test-result/test-results';
   try {
-    const res = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-      },
-    });
+    const res = await authAxios.get(url);
     return res.data;
   } catch (err: any) {
-    switch (err.response.data.errors.message.name) {
-      case 'TokenExpiredError':
-        console.log('JWTの有効期限が切れています');
-        break;
-    }
+    throw new Error(err);
+  }
+};
+
+const registerTestResult = async (): Promise<TestResult> => {
+  const url = '/test-result/test-result';
+  const testResultDto: TestResultDTO = {
+    score: 90,
+    testName: 'TypeScript',
+  };
+  try {
+    const res = await authAxios.post(url, testResultDto);
+    return res.data;
+  } catch (err: any) {
     throw new Error(err);
   }
 };
@@ -71,6 +81,7 @@ const fetchTestResults = async (): Promise<TestResultDTO[]> => {
   <h1>Home</h1>
   <button @click="handleClickUser">ユーザー読み込み</button>
   <button @click="handleClickTest">テスト情報読み込み</button>
+  <button @click="handleClickRegister">テスト情報追加</button>
 
   <template v-if="users">
     <table>
@@ -80,7 +91,6 @@ const fetchTestResults = async (): Promise<TestResultDTO[]> => {
           <th>username</th>
           <th>password</th>
           <th>refresh_token</th>
-          <th>refresh_token_iat</th>
         </tr>
       </thead>
       <tbody>
@@ -90,7 +100,6 @@ const fetchTestResults = async (): Promise<TestResultDTO[]> => {
             <td>{{ item.username }}</td>
             <td>{{ item.password }}</td>
             <td>{{ item.refresh_token }}</td>
-            <td>{{ item.refresh_token_iat }}</td>
           </tr>
         </template>
       </tbody>

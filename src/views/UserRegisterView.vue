@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import axios from 'axios';
 import { ref } from 'vue';
+import { useAuthAxios } from '@/composables/useAuthAxios';
+
+const authAxios = useAuthAxios();
 
 const username = ref('');
 const password = ref('');
 
-const errorMessage = ref('');
+const message = ref('');
 
 const handleClickUserRegister = async () => {
   const body: { username: String; password: String } = {
@@ -13,17 +15,17 @@ const handleClickUserRegister = async () => {
     password: password.value,
   };
   try {
-    const res = await axios.post('/api/auth/user-register', body);
+    const res = await authAxios.post('/auth/user-register', body);
     console.log(res.data);
-    errorMessage.value = '登録完了しました';
+    message.value = '登録完了しました';
     setTimeout(() => {
-      errorMessage.value = '';
+      message.value = '';
     }, 1000);
   } catch (err: any) {
     console.log(err.response.data);
-    errorMessage.value = err.response.data.error.message;
+    message.value = err.response.data.error.message;
     setTimeout(() => {
-      errorMessage.value = '';
+      message.value = '';
     }, 1000);
   }
 };
@@ -36,7 +38,7 @@ const handleClickUserRegister = async () => {
       <input type="text" v-model="username" placeholder="username" />
       <input type="password" v-model="password" placeholder="password" />
       <button @click="handleClickUserRegister">ユーザー登録</button>
-      <div>{{ errorMessage }}</div>
+      <div>{{ message }}</div>
     </div>
   </div>
 </template>
