@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import router from '@/router';
-import { useAuthAxios } from '@/composables/useAuthAxios';
+import { useUserStore, type LoginDto } from '@/stores/user';
 
-const authAxios = useAuthAxios();
+const userStore = useUserStore();
 
 const username = ref('');
 const password = ref('');
@@ -11,18 +11,15 @@ const password = ref('');
 const message = ref('');
 
 const handleClickLogin = async () => {
-  const body: { username: String; password: String } = {
+  const loginDto: LoginDto = {
     username: username.value,
     password: password.value,
   };
-  try {
-    const res = await authAxios.post('/auth/login', body, { withCredentials: true });
-    console.log(res.data);
-    localStorage.setItem('access_token', res.data.access_token);
+  const isLogin = await userStore.login(loginDto);
+  if (isLogin) {
     router.push('/home');
-  } catch (err: any) {
-    console.log(err.response.data);
-    message.value = err.response.data.error.message;
+  } else {
+    message.value = 'ユーザー名またはパスワードが違います';
     setTimeout(() => {
       message.value = '';
     }, 1000);

@@ -34,11 +34,13 @@ export function useAuthAxios() {
 
           // 新しくaccess_tokenを発行する
           const newAccessToken = await refresh();
-          if (!newAccessToken) return router.push('/login');
-          prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-
-          // 再度リクエストする
-          return authAxios(prevRequest);
+          if (newAccessToken) {
+            // トークンをセットし、再度リクエストする
+            prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            return authAxios(prevRequest);
+          } else {
+            router.push('/login');
+          }
         }
         return Promise.reject(error);
       }

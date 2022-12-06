@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import axios from '@/api/axios';
 import { useAuthAxios } from '@/composables/useAuthAxios';
 
 const authAxios = useAuthAxios();
 
 type User = {
-  id: number;
+  user_id: string;
   username: string;
   password: string;
   refresh_token: string;
@@ -42,6 +43,10 @@ const handleClickRegister = async () => {
   await registerTestResult();
 };
 
+const handleClickLogout = async () => {
+  await logout();
+};
+
 const fetchUsers = async (): Promise<User[]> => {
   const url = '/user/users';
   try {
@@ -75,6 +80,10 @@ const registerTestResult = async (): Promise<TestResult> => {
     throw new Error(err);
   }
 };
+const logout = () => {
+  axios.get('/auth/logout', { withCredentials: true });
+  localStorage.removeItem('access_token');
+};
 </script>
 
 <template>
@@ -82,21 +91,22 @@ const registerTestResult = async (): Promise<TestResult> => {
   <button @click="handleClickUser">ユーザー読み込み</button>
   <button @click="handleClickTest">テスト情報読み込み</button>
   <button @click="handleClickRegister">テスト情報追加</button>
+  <button @click="handleClickLogout">ログアウト</button>
 
   <template v-if="users">
     <table>
       <thead>
         <tr>
-          <th>id</th>
+          <th>user_id</th>
           <th>username</th>
           <th>password</th>
           <th>refresh_token</th>
         </tr>
       </thead>
       <tbody>
-        <template v-for="item in users" :key="item.id">
+        <template v-for="item in users" :key="item.user_id">
           <tr>
-            <td>{{ item.id }}</td>
+            <td>{{ item.user_id }}</td>
             <td>{{ item.username }}</td>
             <td>{{ item.password }}</td>
             <td>{{ item.refresh_token }}</td>

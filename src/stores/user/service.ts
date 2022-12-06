@@ -1,12 +1,9 @@
-import axios from 'axios';
+import axios from '@/api/axios';
 import type { LoginDto } from './types';
-import { useAuthAxios } from '@/composables/useAuthAxios';
-const authAxios = useAuthAxios();
 
-export const login = async (loginDto: LoginDto) => {
-  const res = await authAxios.post('/auth/login', loginDto, { withCredentials: true });
-  console.log(res.data);
-  localStorage.setItem('access_token', res.data.access_token);
+export const refresh = async (loginDto: LoginDto) => {
+  const res = await axios.post('/auth/login', loginDto, { withCredentials: true });
+  return res.data;
 };
 
 /**

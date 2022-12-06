@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "axios": "^1.2.0",
-    "axios-middleware": "^0.3.1",
     "pinia": "^2.0.27",
     "sass": "^1.56.1",
     "vue": "^3.2.45",
