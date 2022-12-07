@@ -1,10 +1,9 @@
 import { ref, onMounted, onUnmounted } from 'vue';
-import type { AxiosRequestConfig } from 'axios';
-import { authAxios } from '@/api/axios';
+import type { AxiosInstance, AxiosRequestConfig } from 'axios';
 import router from '@/router';
 import { useRefreshToken } from './useRefreshToken';
 
-export function useAuthAxios() {
+export function useAuthAxios(authAxios: AxiosInstance) {
   const { refresh } = useRefreshToken();
 
   const requestIntercept = ref();

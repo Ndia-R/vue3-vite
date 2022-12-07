@@ -1,14 +1,26 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import axios from '@/api/axios';
+import { axios, authApi } from '@/api/axios';
 import type { User, LoginDto } from './types';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | undefined>(undefined);
 
+  const registerUser = async (loginDto: LoginDto) => {
+    try {
+      await authApi.post('/auth/register', loginDto);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        console.log(err.response);
+      }
+    }
+  };
+
   const login = async (loginDto: LoginDto) => {
     try {
-      const res = await axios.post('/auth/login', loginDto, { withCredentials: true });
+      const res = await authApi.post('/auth/login', loginDto, {
+        withCredentials: true,
+      });
       user.value = res.data;
       return true;
     } catch (err) {
@@ -17,12 +29,13 @@ export const useUserStore = defineStore('user', () => {
   };
 
   const logout = async () => {
-    axios.get('/auth/logout', { withCredentials: true });
+    await authApi.get('/auth/logout', { withCredentials: true });
     localStorage.removeItem('access_token');
     user.value = undefined;
   };
 
   return {
+    registerUser,
     login,
     logout,
   };

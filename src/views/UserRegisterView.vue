@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { emeraldApi } from '@/api/axios';
 import { useAuthAxios } from '@/composables/useAuthAxios';
 
-const authAxios = useAuthAxios();
+const authAxios = useAuthAxios(emeraldApi);
 
 const username = ref('');
 const password = ref('');

@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL_AUTH = 'http://localhost:5000';
+const BASE_URL_EMERALD = 'http://localhost:5000';
 
-export default axios.create({ baseURL: BASE_URL });
+const authApi = axios.create({ baseURL: BASE_URL_AUTH });
+const emeraldApi = axios.create({ baseURL: BASE_URL_EMERALD });
 
-export const authAxios = axios.create({
-  baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
-});
+export { axios, authApi, emeraldApi };

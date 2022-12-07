@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import axios from '@/api/axios';
+import { emeraldApi } from '@/api/axios';
 import { useAuthAxios } from '@/composables/useAuthAxios';
+import { useUserStore } from '@/stores/user';
 
-const authAxios = useAuthAxios();
+const authAxios = useAuthAxios(emeraldApi);
+const { logout } = useUserStore();
 
 type User = {
   user_id: string;
@@ -79,10 +81,6 @@ const registerTestResult = async (): Promise<TestResult> => {
   } catch (err: any) {
     throw new Error(err);
   }
-};
-const logout = () => {
-  axios.get('/auth/logout', { withCredentials: true });
-  localStorage.removeItem('access_token');
 };
 </script>
 
