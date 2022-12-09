@@ -1,4 +1,4 @@
-export type AptitudeTest = {
+export type AptitudeTestResult = {
   id: number;
   user: {
     id: string;

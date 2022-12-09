@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { axios, emeraldApi } from '@/api/axios';
-import type { AptitudeTest, CreateAptitudeTestDto } from './types';
+import type { AptitudeTestResult, CreateAptitudeTestDto } from './types';
 
 export const useAptitudeTestStore = defineStore('aptitudeTest', () => {
-  const aptitudeTests = ref<AptitudeTest[]>([]);
+  const aptitudeTestResults = ref<AptitudeTestResult[]>([]);
 
   const create = async (aptitudeTest: CreateAptitudeTestDto) => {
     try {
@@ -19,8 +19,8 @@ export const useAptitudeTestStore = defineStore('aptitudeTest', () => {
 
   const findAll = async () => {
     try {
-      aptitudeTests.value = await emeraldApi.get('/aptitude-test/results');
-      return aptitudeTests.value;
+      aptitudeTestResults.value = await emeraldApi.get('/aptitude-test/results');
+      return aptitudeTestResults.value;
     } catch (err) {
       if (axios.isAxiosError(err)) {
         console.log(err.response);
