@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { axios, authApi } from '@/api/axios';
-import type { User, LoginDto } from './types';
+import type { User, AuthDto } from './types';
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | undefined>(undefined);
 
-  const registerUser = async (loginDto: LoginDto) => {
+  const registerUser = async (dto: AuthDto) => {
     try {
-      await authApi.post('/auth/register', loginDto);
+      await authApi.post('/auth/register', { dto });
     } catch (err) {
       if (axios.isAxiosError(err)) {
         console.log(err.response);
@@ -16,11 +16,15 @@ export const useUserStore = defineStore('user', () => {
     }
   };
 
-  const login = async (loginDto: LoginDto) => {
+  const login = async (dto: AuthDto) => {
     try {
-      const res = await authApi.post('/auth/login', loginDto, {
-        withCredentials: true,
-      });
+      const res = await authApi.post(
+        '/auth/login',
+        { dto },
+        {
+          withCredentials: true,
+        }
+      );
       user.value = res.data;
       return true;
     } catch (err) {

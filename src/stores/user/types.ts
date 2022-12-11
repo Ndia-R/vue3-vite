@@ -4,7 +4,7 @@ export type User = {
   access_token: string;
 };
 
-export type LoginDto = {
+export type AuthDto = {
   username: string;
   password: string;
 };
